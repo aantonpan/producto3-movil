@@ -36,3 +36,13 @@ yarn-error.*
 *.tsbuildinfo
 
 app-example
+
+# archivos de logs
+*.log
+
+# carpetas de cache de Expo
+.expo-shared/
+
+# carpetas de pruebas (si las creas)
+__tests__/
+coverage/
