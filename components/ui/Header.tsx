@@ -1,6 +1,6 @@
 import React from 'react';
 import { View, Text, StyleSheet, Dimensions } from 'react-native';
-import { Video } from 'expo-av';
+import { Video, ResizeMode } from 'expo-av'; // ✅ Importa ResizeMode
 
 const HEADER_HEIGHT = 220;
 
@@ -14,7 +14,7 @@ export default function Header() {
         rate={1.0}
         volume={0.8}
         isMuted
-        resizeMode="cover"
+        resizeMode={ResizeMode.COVER} // ✅ Tipo correcto
         shouldPlay
         isLooping
         style={StyleSheet.absoluteFill}
@@ -36,7 +36,7 @@ const styles = StyleSheet.create({
   overlay: {
     height: HEADER_HEIGHT,
     width: '100%',
-    backgroundColor: 'rgba(0, 0, 0, 0.4)', // oscurece ligeramente el video
+    backgroundColor: 'rgba(0, 0, 0, 0.4)',
     justifyContent: 'center',
     alignItems: 'center',
     position: 'absolute',
