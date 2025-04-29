@@ -1,16 +1,108 @@
-import { View, Text, Button } from 'react-native';
-import { Stack, useRouter } from 'expo-router';
+// app/media.tsx
+import React, { useEffect, useState } from 'react';
+import {
+  View,
+  ActivityIndicator,
+  Text,
+  StyleSheet,
+  Dimensions
+} from 'react-native';
+import { Video, ResizeMode } from 'expo-av';
+import {
+  Stack,
+  useRouter,
+  useLocalSearchParams
+} from 'expo-router';
+import { doc, getDoc } from 'firebase/firestore';
+import { db } from '../firebase/firebaseConfig';
 
 export default function Media() {
+  const { playerId } = useLocalSearchParams<{ playerId: string }>();
   const router = useRouter();
+
+  const [videoUri, setVideoUri] = useState<string | null>(null);
+  const [loading, setLoading] = useState(true);
+
+  useEffect(() => {
+    if (!playerId) {
+      setLoading(false);
+      return;
+    }
+    (async () => {
+      try {
+        const docRef = doc(db, 'players', playerId);
+        const snap = await getDoc(docRef);
+        if (snap.exists()) {
+          const data = snap.data() as { videoFile?: string };
+          setVideoUri(data.videoFile ?? null);
+        } else {
+          console.warn('Documento de jugador no existe');
+        }
+      } catch (e) {
+        console.error('Error obteniendo videoFile:', e);
+      } finally {
+        setLoading(false);
+      }
+    })();
+  }, [playerId]);
+
+  if (loading) {
+    return (
+      <View style={styles.center}>
+        <ActivityIndicator size="large" />
+      </View>
+    );
+  }
 
   return (
     <>
       <Stack.Screen options={{ title: 'Reproductor Multimedia' }} />
-      <View style={{ flex: 1, justifyContent: 'center', alignItems: 'center' }}>
-        <Text>Pantalla de Reproductor</Text>
-        <Button title="Volver al Inicio" onPress={() => router.push('../inicio')} />
-      </View>
+      {videoUri ? (
+        <View style={styles.videoContainer}>
+          <Video
+            source={{ uri: videoUri }}
+            style={styles.video}
+            useNativeControls
+            resizeMode={ResizeMode.CONTAIN}
+          />
+        </View>
+      ) : (
+        <View style={styles.center}>
+          <Text>No hay vídeo para este jugador.</Text>
+          <Text
+            style={styles.link}
+            onPress={() => router.back()}
+          >
+            ← Volver
+          </Text>
+        </View>
+      )}
     </>
   );
 }
+
+const styles = StyleSheet.create({
+  center: {
+    flex: 1,
+    justifyContent: 'center',
+    alignItems: 'center',
+    padding: 16
+  },
+  link: {
+    marginTop: 12,
+    color: 'blue'
+  },
+  videoContainer: {
+    flex: 1,
+    justifyContent: 'center',
+    alignItems: 'center'
+  },
+  video: {
+    width: Dimensions.get('window').width - 32,
+    height:
+      ((Dimensions.get('window').width - 32) * 9) /
+      16,
+    backgroundColor: '#000',
+    borderRadius: 8
+  }
+});

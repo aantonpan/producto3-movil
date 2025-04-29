@@ -1,6 +1,18 @@
-import { useEffect, useState } from 'react';
-import { Text, View, Image, ScrollView, Button, ActivityIndicator } from 'react-native';
-import { useLocalSearchParams, useRouter, Stack } from 'expo-router';
+// app/detalle.tsx
+import React, { useEffect, useState } from 'react';
+import {
+  Text,
+  View,
+  Image,
+  ScrollView,
+  Button,
+  ActivityIndicator
+} from 'react-native';
+import {
+  useLocalSearchParams,
+  useRouter,
+  Stack
+} from 'expo-router';
 import { styles } from '@/styles/detalleStyles';
 import { doc, getDoc } from 'firebase/firestore';
 import { db } from '../firebase/firebaseConfig';
@@ -22,22 +34,24 @@ type Player = {
 
 export default function Detalle() {
   const router = useRouter();
-  const { id } = useLocalSearchParams();
+  const { id } = useLocalSearchParams<{ id: string }>();
   const [jugador, setJugador] = useState<Player | null>(null);
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
-    if (!id) return;
+    if (!id) {
+      setLoading(false);
+      return;
+    }
 
     const fetchJugador = async () => {
       try {
-        const docRef = doc(db, 'players', id as string);
+        const docRef = doc(db, 'players', id);
         const docSnap = await getDoc(docRef);
         if (docSnap.exists()) {
-          const { id: _, ...playerData } = docSnap.data();
-          setJugador({ id: docSnap.id, ...playerData } as Player);
-        }
-        else {
+          const data = docSnap.data() as Omit<Player, 'id'>;
+          setJugador({ id: docSnap.id, ...data });
+        } else {
           console.warn('Jugador no encontrado');
         }
       } catch (error) {
@@ -50,19 +64,26 @@ export default function Detalle() {
     fetchJugador();
   }, [id]);
 
+  // Estado de carga
   if (loading) {
     return (
       <View style={{ flex: 1, justifyContent: 'center', alignItems: 'center' }}>
         <ActivityIndicator size="large" />
-        <Text>Cargando jugador...</Text>
+        <Text style={{ marginTop: 8 }}>Cargando jugador...</Text>
       </View>
     );
   }
 
+  // Si no hay jugador
   if (!jugador) {
-    return <Text style={{ padding: 20 }}>Jugador no encontrado.</Text>;
+    return (
+      <View style={{ flex: 1, justifyContent: 'center', alignItems: 'center', padding: 16 }}>
+        <Text>Jugador no encontrado.</Text>
+      </View>
+    );
   }
 
+  // Vista de detalle
   return (
     <>
       <Stack.Screen options={{ title: jugador.name }} />
@@ -81,10 +102,16 @@ export default function Detalle() {
         <Text style={styles.data}>RPG: {jugador.rpg}</Text>
         <Text style={styles.data}>APG: {jugador.apg}</Text>
 
-        <Button
-          title="Ver vídeo"
-          onPress={() => router.push({ pathname: '/media', params: { jugador: JSON.stringify(jugador) } })}
-        />
+        <View style={{ marginTop: 24 }}>
+          <Button
+            title="Ver vídeo"
+            onPress={() =>
+              router.push(
+                `/media?playerId=${encodeURIComponent(jugador.id)}`
+              )
+            }
+          />
+        </View>
       </ScrollView>
     </>
   );
