@@ -1,15 +1,13 @@
 // app/inicio.tsx
 import React, { useEffect, useState } from 'react';
-import { View, FlatList, StyleSheet, Text } from 'react-native';
+import { View, FlatList, Text } from 'react-native';
 import { Stack, useRouter } from 'expo-router';
 import { collection, getDocs } from 'firebase/firestore';
 import { db } from '../firebase/firebaseConfig';
 import Header from '../components/ui/Header';
 import Footer from '../components/ui/Footer';
-import { styles } from '../styles/inicioStyles';
 import PlayerCard, { Player } from '../components/ui/PlayerCard';
-
-
+import { styles } from '../styles/inicioStyles';
 
 export default function Inicio() {
   const [players, setPlayers] = useState<Player[]>([]);
@@ -17,38 +15,22 @@ export default function Inicio() {
 
   useEffect(() => {
     (async () => {
-      try {
-        const snap = await getDocs(collection(db, 'players'));
-        const data: Player[] = snap.docs.map(d => {
-          const docData = d.data() as any;
-          return {
-            id:       d.id,
-            name:     docData.name,
-            position: docData.position,
-            ppg:      docData.ppg,
-            rpg:      docData.rpg,
-            apg:      docData.apg,
-            image:    docData.image,
-          };
-        });
-        setPlayers(data);
-      } catch (e) {
-        console.error('Error obteniendo jugadores:', e);
-      }
+      const snap = await getDocs(collection(db, 'players'));
+      const data = snap.docs.map(d => {
+        const doc = d.data() as any;
+        return {
+          id:       d.id,
+          name:     doc.name,
+          position: doc.position,
+          ppg:      doc.ppg,
+          rpg:      doc.rpg,
+          apg:      doc.apg,
+          image:    doc.image,
+        };
+      });
+      setPlayers(data);
     })();
   }, []);
-
-  const renderItem = ({ item }: { item: Player }) => (
-    <PlayerCard
-      player={item}
-      onPress={() =>
-        router.push({
-          pathname: '/detalle',
-          params:   { id: item.id }
-        })
-      }
-    />
-  );
 
   return (
     <View style={styles.container}>
@@ -62,7 +44,14 @@ export default function Inicio() {
         <FlatList
           data={players}
           keyExtractor={item => item.id}
-          renderItem={renderItem}
+          renderItem={({ item }) => (
+            <PlayerCard
+              player={item}
+              onPress={() =>
+                router.push({ pathname: '/detalle', params: { id: item.id } })
+              }
+            />
+          )}
           contentContainerStyle={styles.list}
         />
       )}
