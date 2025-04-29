@@ -1,4 +1,3 @@
-// app/_layout.tsx
 import React from 'react';
 import {
   DefaultTheme as NavigationDefault,
@@ -13,67 +12,73 @@ import {
 import { Stack } from 'expo-router';
 import { useColorScheme } from '@/hooks/useColorScheme';
 import { StatusBar } from 'expo-status-bar';
-const TEXT   = '#333333';
-
+import { TouchableOpacity, Text, StyleSheet } from 'react-native';
 
 export default function RootLayout() {
   const colorScheme = useColorScheme();
   const ORANGE = '#FFA500';
   const WHITE  = '#FFFFFF';
-
   const paperTheme = {
     ...(colorScheme === 'dark' ? PaperDark : PaperLight),
     colors: {
       ...(colorScheme === 'dark' ? PaperDark.colors : PaperLight.colors),
-      primary:   ORANGE,
+      primary: ORANGE,
       onPrimary: WHITE,
-      background:WHITE,
-      surface:   WHITE,
+      background: WHITE,
+      surface: WHITE,
       secondary: ORANGE,
     }
   };
-
   const navTheme = {
     ...(colorScheme === 'dark' ? NavigationDark : NavigationDefault),
     colors: {
       ...(colorScheme === 'dark' ? NavigationDark.colors : NavigationDefault.colors),
-      primary:   ORANGE,
-      onPrimary: WHITE,
-      background:WHITE,
-      surface:   WHITE,
-      secondary: ORANGE,
-      text:      TEXT,
-      }
+      primary: ORANGE,
+      background: WHITE,
+      card: WHITE,
+      text: '#333333',
+      border: '#CCCCCC',
+    }
   };
 
   return (
     <PaperProvider theme={paperTheme}>
       <NavigationThemeProvider value={navTheme}>
         <Stack
-          initialRouteName="inicio"
-          screenOptions={{
+         initialRouteName="home"
+          screenOptions={({ navigation }) => ({
             headerStyle:      { backgroundColor: ORANGE },
             headerTintColor:   WHITE,
             headerTitleAlign: 'center',
             contentStyle:     { backgroundColor: WHITE },
-          }}
+            headerRight: () => (
+              <TouchableOpacity
+                onPress={() => navigation.navigate('home')}
+                style={styles.homeButton}
+              >
+                <Text style={styles.homeText}>Inicio</Text>
+              </TouchableOpacity>
+            )
+          })}
         >
-          <Stack.Screen
-            name="inicio"
-            options={{ title: 'Listado de Jugadores' }}
-          />
-          <Stack.Screen
-            name="detalle"
-            options={{ title: 'Detalle de Jugador' }}
-          />
-          <Stack.Screen
-            name="media"
-            options={{ title: 'Reproductor Multimedia' }}
-          />
+          <Stack.Screen name="home" options={{ headerShown: true }} />
+          <Stack.Screen name="listado"  options={{ title: 'Listado de Jugadores' }} />
+          <Stack.Screen name="detalle" options={{ title: 'Detalle de Jugador' }} />
+          <Stack.Screen name="media"   options={{ title: 'Reproductor Multimedia' }} />
         </Stack>
-
         <StatusBar style="auto" />
       </NavigationThemeProvider>
     </PaperProvider>
   );
 }
+
+const styles = StyleSheet.create({
+  homeButton: {
+    marginRight: 16,
+    padding: 6,
+  },
+  homeText: {
+    color: '#FFFFFF',
+    fontWeight: '600',
+  },
+});

@@ -1,15 +1,12 @@
-// app/inicio.tsx
 import React, { useEffect, useState } from 'react';
 import { View, FlatList, Text } from 'react-native';
-import { Stack, useRouter } from 'expo-router';
+import { useRouter } from 'expo-router';
 import { collection, getDocs } from 'firebase/firestore';
 import { db } from '../firebase/firebaseConfig';
-import Header from '../components/ui/Header';
-import Footer from '../components/ui/Footer';
 import PlayerCard, { Player } from '../components/ui/PlayerCard';
-import { styles } from '../styles/inicioStyles';
+import { styles } from '@/styles/listadoStyles';
 
-export default function Inicio() {
+export default function Listado() {
   const [players, setPlayers] = useState<Player[]>([]);
   const router = useRouter();
 
@@ -34,8 +31,6 @@ export default function Inicio() {
 
   return (
     <View style={styles.container}>
-      <Stack.Screen options={{ title: 'Listado de Jugadores' }} />
-      <Header />
       {players.length === 0 ? (
         <View style={styles.content}>
           <Text>No hay jugadores disponibles</Text>
@@ -55,7 +50,6 @@ export default function Inicio() {
           contentContainerStyle={styles.list}
         />
       )}
-      <Footer />
     </View>
   );
 }

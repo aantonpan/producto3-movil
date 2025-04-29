@@ -23,12 +23,10 @@ export const styles = StyleSheet.create({
     width: Dimensions.get("window").width - 32,
     borderRadius: 12,
     backgroundColor: "#FFFFFF",
-    // sombra iOS
     shadowColor: "#000",
     shadowOffset: { width: 0, height: 2 },
     shadowOpacity: 0.1,
     shadowRadius: 8,
-    // elevación Android
     elevation: 2,
     marginBottom: 24,
   },
@@ -49,7 +47,6 @@ export const styles = StyleSheet.create({
     color: "#FFA500",
   },
 
-  // Estilos para cada fila de la tabla
   row: {
     flexDirection: "row",
     paddingVertical: 12,

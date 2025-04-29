@@ -1,6 +1,6 @@
 import React from 'react';
 import { View, Text, StyleSheet, Dimensions } from 'react-native';
-import { Video, ResizeMode } from 'expo-av'; // ✅ Importa ResizeMode
+import { Video, ResizeMode } from 'expo-av'; 
 
 const HEADER_HEIGHT = 220;
 
@@ -14,8 +14,7 @@ export default function Header() {
         rate={1.0}
         volume={0.8}
         isMuted
-        resizeMode={ResizeMode.COVER} // ✅ Tipo correcto
-        shouldPlay
+        resizeMode={ResizeMode.COVER} 
         isLooping
         style={StyleSheet.absoluteFill}
       />

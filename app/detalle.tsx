@@ -70,7 +70,6 @@ export default function Detalle() {
     );
   }
 
-  // datos para zebra stripes
   const rows = [
     ['Número', `${player.number}`],
     ['Edad',   `${player.age} años`],

@@ -1,4 +1,3 @@
-// components/ui/PlayerCard.tsx
 import React from 'react';
 import { StyleSheet } from 'react-native';
 import { Card, Title, Paragraph } from 'react-native-paper';
