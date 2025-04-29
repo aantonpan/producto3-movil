@@ -23,4 +23,18 @@ export const styles = StyleSheet.create({
     fontWeight: "bold",
     fontSize: 18,
   },
+
+  container: {
+    flex: 1,
+  },
+  content: {
+    flex:           1,
+    justifyContent: 'center',
+    alignItems:     'center',
+  },
+  list: {
+    padding:         16,
+    backgroundColor: '#eee',
+  },
+
 });

@@ -6,7 +6,10 @@ import { collection, getDocs } from 'firebase/firestore';
 import { db } from '../firebase/firebaseConfig';
 import Header from '../components/ui/Header';
 import Footer from '../components/ui/Footer';
-import PlayerCard, { Player } from '@/components/ui/playerCard';
+import { styles } from '../styles/inicioStyles';
+import PlayerCard, { Player } from '../components/ui/PlayerCard';
+
+
 
 export default function Inicio() {
   const [players, setPlayers] = useState<Player[]>([]);
@@ -67,16 +70,3 @@ export default function Inicio() {
     </View>
   );
 }
-
-const styles = StyleSheet.create({
-  container: { flex: 1 },
-  content: {
-    flex:            1,
-    justifyContent:  'center',
-    alignItems:      'center',
-  },
-  list: {
-    padding:         16,
-    backgroundColor: '#eee',
-  },
-});

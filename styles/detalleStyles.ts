@@ -1,26 +1,30 @@
-import { StyleSheet } from "react-native";
-import FastImage from "react-native-fast-image";
+// styles/detalleStyles.ts
+import { StyleSheet, Dimensions } from "react-native";
 
 export const styles = StyleSheet.create({
-  container: {
-    padding: 20,
+  loading: {
+    flex: 1,
+    justifyContent: "center",
     alignItems: "center",
-    gap: 8,
-    backgroundColor: "#f4f4f4",
   },
-  image: {
-    width: 200,
-    height: 200,
+  center: {
+    flex: 1,
+    justifyContent: "center",
+    alignItems: "center",
+    padding: 16,
+  },
+  container: {
+    padding: 16,
+    alignItems: "center",
+  },
+  card: {
+    width: Dimensions.get("window").width - 32,
     borderRadius: 12,
-    marginBottom: 8,
-    resizeMode: "cover",
+    overflow: "hidden",
+    elevation: 4,
   },
-  name: {
-    fontSize: 24,
-    fontWeight: "bold",
-    marginTop: 10,
-  },
-  data: {
-    fontSize: 16,
+  actions: {
+    justifyContent: "center", // <–– centrado
+    padding: 16,
   },
 });

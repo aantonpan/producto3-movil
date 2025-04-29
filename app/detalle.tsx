@@ -5,6 +5,8 @@ import { Appbar, Card, Title, Paragraph, Button as PaperButton, Text } from 'rea
 import { useLocalSearchParams, useRouter, Stack } from 'expo-router';
 import { doc, getDoc } from 'firebase/firestore';
 import { db } from '../firebase/firebaseConfig';
+import { styles } from '../styles/detalleStyles';
+
 
 type Player = {
   id: string;
@@ -107,30 +109,3 @@ export default function Detalle() {
   );
 }
 
-const styles = StyleSheet.create({
-  loading: {
-    flex:            1,
-    justifyContent:  'center',
-    alignItems:      'center',
-  },
-  center: {
-    flex:            1,
-    justifyContent:  'center',
-    alignItems:      'center',
-    padding:         16,
-  },
-  container: {
-    padding:         16,
-    alignItems:      'center',
-  },
-  card: {
-    width:           Dimensions.get('window').width - 32,
-    borderRadius:    12,
-    overflow:        'hidden',
-    elevation:       4,
-  },
-  actions: {
-    justifyContent: 'flex-end',
-    padding:        16,
-  },
-});
