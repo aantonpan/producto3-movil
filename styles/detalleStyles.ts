@@ -24,7 +24,9 @@ export const styles = StyleSheet.create({
     elevation: 4,
   },
   actions: {
-    justifyContent: "center", // <–– centrado
-    padding: 16,
+    alignSelf:      'stretch',   // <–– estira al ancho del Card
+    flexDirection:  'row',
+    justifyContent: 'center',
+    padding:        16,
   },
 });

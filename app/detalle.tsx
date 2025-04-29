@@ -88,19 +88,19 @@ export default function Detalle() {
               Estadísticas: PPG {player.ppg} | RPG {player.rpg} | APG {player.apg}
             </Paragraph>
           </Card.Content>
-          <Card.Actions style={styles.actions}>
-            <PaperButton
-              mode="contained"
-              onPress={() =>
-                router.push(`/media?playerId=${encodeURIComponent(player.id)}`)
-              }
-            >
-              Ver vídeo
-            </PaperButton>
-          </Card.Actions>
-        </Card>
-      </ScrollView>
-    </>
+          <Card.Actions style={[styles.actions]}>
+         <View style={{ flex: 1, alignItems: 'center' }}>
+           <PaperButton
+             mode="contained"
+             onPress={() => router.push(`/media?playerId=${player.id}`)}
+           >
+             Ver vídeo
+           </PaperButton>
+         </View>
+       </Card.Actions>
+       </Card>
+     </ScrollView>
+   </>
   );
 }
 
