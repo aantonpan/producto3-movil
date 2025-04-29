@@ -73,11 +73,6 @@ export default function Detalle() {
 
   return (
     <>
-      <Stack.Screen options={{ headerShown: false }} />
-      <Appbar.Header elevated>
-        <Appbar.BackAction onPress={() => router.back()} />
-        <Appbar.Content title={player.name} />
-      </Appbar.Header>
 
       <ScrollView contentContainerStyle={styles.container}>
         <Card style={styles.card}>

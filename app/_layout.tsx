@@ -15,73 +15,61 @@ import { useColorScheme } from '@/hooks/useColorScheme';
 import { StatusBar } from 'expo-status-bar';
 
 export default function RootLayout() {
-  const colorScheme = useColorScheme(); // 'light' | 'dark'
-
-  // Colores principales
+  const colorScheme = useColorScheme();
   const ORANGE = '#FFA500';
   const WHITE  = '#FFFFFF';
 
-  // Theme Paper claro
-  const paperLightTheme = {
-    ...PaperLight,
+  const paperTheme = {
+    ...(colorScheme === 'dark' ? PaperDark : PaperLight),
     colors: {
-      ...PaperLight.colors,
-      primary: ORANGE,
+      ...(colorScheme === 'dark' ? PaperDark.colors : PaperLight.colors),
+      primary:   ORANGE,
       onPrimary: WHITE,
-      background: WHITE,
-      surface: WHITE,
-      secondary: ORANGE,
-      // puedes sobreescribir más colores si quieres:
-      // error, text, backdrop, etc.
-    }
-  };
-
-  // Theme Paper oscuro (si quisieras blanco de surface igual en dark)
-  const paperDarkTheme = {
-    ...PaperDark,
-    colors: {
-      ...PaperDark.colors,
-      primary: ORANGE,
-      onPrimary: WHITE,
-      background: WHITE,  // ojo: esto hace el fondo blanco incluso en dark
-      surface: WHITE,
+      background:WHITE,
+      surface:   WHITE,
       secondary: ORANGE,
     }
   };
 
-  // Theme navegación claro
-  const navLightTheme = {
-    ...NavigationDefault,
+  const navTheme = {
+    ...(colorScheme === 'dark' ? NavigationDark : NavigationDefault),
     colors: {
-      ...NavigationDefault.colors,
-      primary: ORANGE,
-      background: WHITE,
-      card: WHITE,
-      text: '#000000',
-      border: '#CCCCCC',
+      ...(colorScheme === 'dark' ? NavigationDark.colors : NavigationDefault.colors),
+      primary:   ORANGE,
+      background:WHITE,
+      card:      WHITE,
+      text:      '#000',
+      border:    '#ccc',
     }
   };
-
-  // Theme navegación oscuro
-  const navDarkTheme = {
-    ...NavigationDark,
-    colors: {
-      ...NavigationDark.colors,
-      primary: ORANGE,
-      background: WHITE,
-      card: WHITE,
-      text: '#000000',
-      border: '#444444',
-    }
-  };
-
-  const paperTheme = colorScheme === 'dark' ? paperDarkTheme : paperLightTheme;
-  const navTheme   = colorScheme === 'dark' ? navDarkTheme   : navLightTheme;
 
   return (
     <PaperProvider theme={paperTheme}>
       <NavigationThemeProvider value={navTheme}>
-        <Stack initialRouteName="inicio" />
+        <Stack
+          initialRouteName="inicio"
+          screenOptions={{
+            headerStyle:      { backgroundColor: ORANGE },
+            headerTintColor:   WHITE,
+            headerTitleAlign: 'center',
+            contentStyle:     { backgroundColor: WHITE },
+          }}
+        >
+          {/* aquí nombras tus rutas y sus títulos */}
+          <Stack.Screen
+            name="inicio"
+            options={{ title: 'Listado de Jugadores' }}
+          />
+          <Stack.Screen
+            name="detalle"
+            options={{ title: 'Detalle de Jugador' }}
+          />
+          <Stack.Screen
+            name="media"
+            options={{ title: 'Reproductor Multimedia' }}
+          />
+        </Stack>
+
         <StatusBar style="auto" />
       </NavigationThemeProvider>
     </PaperProvider>
