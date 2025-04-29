@@ -1,12 +1,17 @@
 // app/detalle.tsx
 import React, { useEffect, useState } from 'react';
-import { ScrollView, StyleSheet, View, Dimensions, ActivityIndicator } from 'react-native';
-import { Appbar, Card, Title, Paragraph, Button as PaperButton, Text } from 'react-native-paper';
-import { useLocalSearchParams, useRouter, Stack } from 'expo-router';
+import { ScrollView, View, ActivityIndicator } from 'react-native';
+import {
+  Card,
+  Title,
+  DataTable,
+  Button as PaperButton,
+  Text
+} from 'react-native-paper';
+import { useLocalSearchParams, useRouter } from 'expo-router';
 import { doc, getDoc } from 'firebase/firestore';
 import { db } from '../firebase/firebaseConfig';
 import { styles } from '../styles/detalleStyles';
-
 
 type Player = {
   id: string;
@@ -15,7 +20,7 @@ type Player = {
   position: string;
   age: number;
   height: string;
-  weight: number;
+  weight: string;
   ppg: number;
   rpg: number;
   apg: number;
@@ -30,15 +35,12 @@ export default function Detalle() {
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
-    if (!playerId) {
-      setLoading(false);
-      return;
-    }
+    if (!playerId) return setLoading(false);
     (async () => {
       try {
         const snap = await getDoc(doc(db, 'players', playerId));
         if (snap.exists()) {
-          setPlayer({ id: snap.id, ...(snap.data() as Omit<Player,'id'>) });
+        setPlayer({ ...(snap.data() as Omit<Player, 'id'>), id: snap.id });
         }
       } catch (e) {
         console.error(e);
@@ -59,48 +61,66 @@ export default function Detalle() {
 
   if (!player) {
     return (
-      <>
-        <Appbar.Header>
-          <Appbar.BackAction onPress={() => router.back()} />
-          <Appbar.Content title="Jugador no encontrado" />
-        </Appbar.Header>
-        <View style={styles.center}>
-          <Text>Lo sentimos, no encontramos ese jugador.</Text>
-        </View>
-      </>
+      <View style={styles.center}>
+        <Text>Jugador no encontrado.</Text>
+      </View>
     );
   }
 
   return (
-    <>
+    <ScrollView contentContainerStyle={styles.container}>
+      <Card style={styles.card}>
+        <Card.Cover source={{ uri: player.image }} />
+        <Card.Content>
+          <Title style={styles.title}>{player.name}</Title>
 
-      <ScrollView contentContainerStyle={styles.container}>
-        <Card style={styles.card}>
-          <Card.Cover source={{ uri: player.image }} />
-          <Card.Content>
-            <Title>{player.name}</Title>
-            <Paragraph>Número: {player.number}</Paragraph>
-            <Paragraph>Edad: {player.age} años</Paragraph>
-            <Paragraph>Altura: {player.height} m</Paragraph>
-            <Paragraph>Peso: {player.weight} kg</Paragraph>
-            <Paragraph>Posición: {player.position}</Paragraph>
-            <Paragraph>
-              Estadísticas: PPG {player.ppg} | RPG {player.rpg} | APG {player.apg}
-            </Paragraph>
-          </Card.Content>
-          <Card.Actions style={[styles.actions]}>
-         <View style={{ flex: 1, alignItems: 'center' }}>
-           <PaperButton
-             mode="contained"
-             onPress={() => router.push(`/media?playerId=${player.id}`)}
-           >
-             Ver vídeo
-           </PaperButton>
-         </View>
-       </Card.Actions>
-       </Card>
-     </ScrollView>
-   </>
+          <DataTable>
+            <DataTable.Row>
+              <DataTable.Cell textStyle={styles.cellLabel}>Número</DataTable.Cell>
+              <DataTable.Cell textStyle={styles.cellValue} numeric>{player.number}</DataTable.Cell>
+            </DataTable.Row>
+            <DataTable.Row>
+              <DataTable.Cell textStyle={styles.cellLabel}>Edad</DataTable.Cell>
+              <DataTable.Cell textStyle={styles.cellValue} numeric>{player.age} años</DataTable.Cell>
+            </DataTable.Row>
+            <DataTable.Row>
+              <DataTable.Cell textStyle={styles.cellLabel}>Altura</DataTable.Cell>
+              <DataTable.Cell textStyle={styles.cellValue} numeric>{player.height} m</DataTable.Cell>
+            </DataTable.Row>
+            <DataTable.Row>
+              <DataTable.Cell textStyle={styles.cellLabel}>Peso</DataTable.Cell>
+              <DataTable.Cell textStyle={styles.cellValue} numeric>{player.weight} kg</DataTable.Cell>
+            </DataTable.Row>
+            <DataTable.Row>
+              <DataTable.Cell textStyle={styles.cellLabel}>Posición</DataTable.Cell>
+                <DataTable.Cell numeric textStyle={styles.cellValue}>{player.position}</DataTable.Cell>
+            </DataTable.Row>
+            <DataTable.Row>
+              <DataTable.Cell textStyle={styles.cellLabel}>PPG</DataTable.Cell>
+              <DataTable.Cell textStyle={styles.cellValue} numeric>{player.ppg}</DataTable.Cell>
+            </DataTable.Row>
+            <DataTable.Row>
+              <DataTable.Cell textStyle={styles.cellLabel}>RPG</DataTable.Cell>
+              <DataTable.Cell textStyle={styles.cellValue} numeric>{player.rpg}</DataTable.Cell>
+            </DataTable.Row>
+            <DataTable.Row>
+              <DataTable.Cell textStyle={styles.cellLabel}>APG</DataTable.Cell>
+              <DataTable.Cell textStyle={styles.cellValue} numeric>{player.apg}</DataTable.Cell>
+            </DataTable.Row>
+          </DataTable>
+        </Card.Content>
+
+        <Card.Actions style={styles.actions}>
+          <View style={{ flex: 1, alignItems: 'center' }}>
+            <PaperButton
+              mode="contained"
+              onPress={() => router.push(`/media?playerId=${player.id}`)}
+            >
+              Ver vídeo
+            </PaperButton>
+          </View>
+        </Card.Actions>
+      </Card>
+    </ScrollView>
   );
 }
-

@@ -13,6 +13,8 @@ import {
 import { Stack } from 'expo-router';
 import { useColorScheme } from '@/hooks/useColorScheme';
 import { StatusBar } from 'expo-status-bar';
+const TEXT   = '#333333';
+
 
 export default function RootLayout() {
   const colorScheme = useColorScheme();
@@ -36,11 +38,12 @@ export default function RootLayout() {
     colors: {
       ...(colorScheme === 'dark' ? NavigationDark.colors : NavigationDefault.colors),
       primary:   ORANGE,
+      onPrimary: WHITE,
       background:WHITE,
-      card:      WHITE,
-      text:      '#000',
-      border:    '#ccc',
-    }
+      surface:   WHITE,
+      secondary: ORANGE,
+      text:      TEXT,
+      }
   };
 
   return (
@@ -55,7 +58,6 @@ export default function RootLayout() {
             contentStyle:     { backgroundColor: WHITE },
           }}
         >
-          {/* aquí nombras tus rutas y sus títulos */}
           <Stack.Screen
             name="inicio"
             options={{ title: 'Listado de Jugadores' }}

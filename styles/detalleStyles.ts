@@ -21,12 +21,31 @@ export const styles = StyleSheet.create({
     width: Dimensions.get("window").width - 32,
     borderRadius: 12,
     overflow: "hidden",
-    elevation: 4,
+    elevation: 6, 
+    shadowColor: "#000",
+    shadowOffset: { width: 0, height: 2 },
+    shadowOpacity: 0.25,
+    shadowRadius: 4,
+    backgroundColor: "#fff",
   },
+  title: {
+    marginTop: 16,
+    textAlign: "center",
+    color: "#FFA500",
+    fontWeight: "bold",
+  },
+  cellLabel: {
+    fontWeight: "bold",
+    color: "#333333",
+  },
+
+  cellValue: {
+    color: "#333333",
+    textAlign: 'right',
+  },
+
   actions: {
-    alignSelf:      'stretch',   // <–– estira al ancho del Card
-    flexDirection:  'row',
-    justifyContent: 'center',
-    padding:        16,
+    alignSelf: "stretch",
+    padding: 16,
   },
 });
