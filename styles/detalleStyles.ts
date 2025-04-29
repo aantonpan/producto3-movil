@@ -1,4 +1,7 @@
+// styles/detalleStyles.ts
 import { StyleSheet, Dimensions } from "react-native";
+
+const { width: SCREEN_W, height: SCREEN_H } = Dimensions.get("window");
 
 export const styles = StyleSheet.create({
   loading: {
@@ -12,15 +15,13 @@ export const styles = StyleSheet.create({
     alignItems: "center",
     padding: 16,
   },
-
   container: {
     padding: 16,
     alignItems: "center",
     backgroundColor: "#F9F9F9",
   },
-
   card: {
-    width: Dimensions.get("window").width - 32,
+    width: SCREEN_W - 32,
     borderRadius: 12,
     backgroundColor: "#FFFFFF",
     shadowColor: "#000",
@@ -30,14 +31,12 @@ export const styles = StyleSheet.create({
     elevation: 2,
     marginBottom: 24,
   },
-
   cover: {
     height: 180,
     borderTopLeftRadius: 12,
     borderTopRightRadius: 12,
     overflow: "hidden",
   },
-
   title: {
     marginTop: 16,
     marginBottom: 24,
@@ -46,7 +45,6 @@ export const styles = StyleSheet.create({
     fontWeight: "600",
     color: "#FFA500",
   },
-
   row: {
     flexDirection: "row",
     paddingVertical: 12,
@@ -56,7 +54,6 @@ export const styles = StyleSheet.create({
   rowEven: {
     backgroundColor: "#F2F2F2",
   },
-
   cellLabel: {
     flex: 1,
     fontWeight: "500",
@@ -67,17 +64,41 @@ export const styles = StyleSheet.create({
     textAlign: "right",
     color: "#555555",
   },
-
   actions: {
     padding: 16,
     flexDirection: "row",
     alignSelf: "center",
   },
-
   playButton: {
     width: 200,
     borderRadius: 32,
     backgroundColor: "#FFA500",
+  },
 
+  // estilos del modal de imagen
+  modalContainer: {
+    backgroundColor: "white",
+    margin: 20,
+    borderRadius: 8,
+    padding: 16,
+    alignItems: "center",
+  },
+  fullImage: {
+    width: SCREEN_W * 0.9,
+    height: SCREEN_H * 0.5,
+    marginBottom: 12,
+  },
+  modalCloseContainer: {
+    flexDirection: "row",
+    alignItems: "center",
+    marginTop: 8,
+  },
+  modalCloseIcon: {
+    marginRight: 8,
+  },
+  modalCloseText: {
+    color: "#FFA500",
+    fontSize: 16,
+    fontWeight: "600",
   },
 });
