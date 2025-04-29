@@ -1,12 +1,16 @@
-// app/detalle.tsx
 import React, { useEffect, useState } from 'react';
-import { ScrollView, View, ActivityIndicator } from 'react-native';
+import {
+  ScrollView,
+  View,
+  ActivityIndicator,
+  Text as RNText
+} from 'react-native';
 import {
   Card,
   Title,
   DataTable,
   Button as PaperButton,
-  Text
+  IconButton
 } from 'react-native-paper';
 import { useLocalSearchParams, useRouter } from 'expo-router';
 import { doc, getDoc } from 'firebase/firestore';
@@ -40,7 +44,7 @@ export default function Detalle() {
       try {
         const snap = await getDoc(doc(db, 'players', playerId));
         if (snap.exists()) {
-        setPlayer({ ...(snap.data() as Omit<Player, 'id'>), id: snap.id });
+          setPlayer({ ...(snap.data() as Omit<Player,'id'>), id: snap.id });
         }
       } catch (e) {
         console.error(e);
@@ -54,71 +58,74 @@ export default function Detalle() {
     return (
       <View style={styles.loading}>
         <ActivityIndicator size="large" />
-        <Text>Cargando jugador…</Text>
+        <RNText>Cargando jugador…</RNText>
+      </View>
+    );
+  }
+  if (!player) {
+    return (
+      <View style={styles.center}>
+        <RNText>Jugador no encontrado.</RNText>
       </View>
     );
   }
 
-  if (!player) {
-    return (
-      <View style={styles.center}>
-        <Text>Jugador no encontrado.</Text>
-      </View>
-    );
-  }
+  // datos para zebra stripes
+  const rows = [
+    ['Número', `${player.number}`],
+    ['Edad',   `${player.age} años`],
+    ['Altura', `${player.height} m`],
+    ['Peso',   `${player.weight} kg`],
+    ['Posición', player.position],
+    ['PPG',    `${player.ppg}`],
+    ['RPG',    `${player.rpg}`],
+    ['APG',    `${player.apg}`],
+  ];
 
   return (
     <ScrollView contentContainerStyle={styles.container}>
       <Card style={styles.card}>
-        <Card.Cover source={{ uri: player.image }} />
+        <Card.Cover
+          source={{ uri: player.image }}
+          style={styles.cover}
+        />
         <Card.Content>
           <Title style={styles.title}>{player.name}</Title>
 
-          <DataTable>
-            <DataTable.Row>
-              <DataTable.Cell textStyle={styles.cellLabel}>Número</DataTable.Cell>
-              <DataTable.Cell textStyle={styles.cellValue} numeric>{player.number}</DataTable.Cell>
-            </DataTable.Row>
-            <DataTable.Row>
-              <DataTable.Cell textStyle={styles.cellLabel}>Edad</DataTable.Cell>
-              <DataTable.Cell textStyle={styles.cellValue} numeric>{player.age} años</DataTable.Cell>
-            </DataTable.Row>
-            <DataTable.Row>
-              <DataTable.Cell textStyle={styles.cellLabel}>Altura</DataTable.Cell>
-              <DataTable.Cell textStyle={styles.cellValue} numeric>{player.height} m</DataTable.Cell>
-            </DataTable.Row>
-            <DataTable.Row>
-              <DataTable.Cell textStyle={styles.cellLabel}>Peso</DataTable.Cell>
-              <DataTable.Cell textStyle={styles.cellValue} numeric>{player.weight} kg</DataTable.Cell>
-            </DataTable.Row>
-            <DataTable.Row>
-              <DataTable.Cell textStyle={styles.cellLabel}>Posición</DataTable.Cell>
-                <DataTable.Cell numeric textStyle={styles.cellValue}>{player.position}</DataTable.Cell>
-            </DataTable.Row>
-            <DataTable.Row>
-              <DataTable.Cell textStyle={styles.cellLabel}>PPG</DataTable.Cell>
-              <DataTable.Cell textStyle={styles.cellValue} numeric>{player.ppg}</DataTable.Cell>
-            </DataTable.Row>
-            <DataTable.Row>
-              <DataTable.Cell textStyle={styles.cellLabel}>RPG</DataTable.Cell>
-              <DataTable.Cell textStyle={styles.cellValue} numeric>{player.rpg}</DataTable.Cell>
-            </DataTable.Row>
-            <DataTable.Row>
-              <DataTable.Cell textStyle={styles.cellLabel}>APG</DataTable.Cell>
-              <DataTable.Cell textStyle={styles.cellValue} numeric>{player.apg}</DataTable.Cell>
-            </DataTable.Row>
-          </DataTable>
+          {rows.map(([label, value], i) => (
+            <View
+              key={label}
+              style={[
+                styles.row,
+                i % 2 === 1 && styles.rowEven
+              ]}
+            >
+              <DataTable.Cell textStyle={styles.cellLabel}>
+                {label}
+              </DataTable.Cell>
+              <DataTable.Cell
+                textStyle={styles.cellValue}
+                numeric
+              >
+                {value}
+              </DataTable.Cell>
+            </View>
+          ))}
         </Card.Content>
 
         <Card.Actions style={styles.actions}>
-          <View style={{ flex: 1, alignItems: 'center' }}>
-            <PaperButton
-              mode="contained"
-              onPress={() => router.push(`/media?playerId=${player.id}`)}
-            >
-              Ver vídeo
-            </PaperButton>
-          </View>
+          <PaperButton
+            
+            icon="play-circle"
+            mode="contained"
+            contentStyle={{ flexDirection: 'row-reverse' }}
+            style={styles.playButton}
+            labelStyle={{ color: '#FFFFFF', fontSize: 16 }}
+            onPress={() => router.push(`/media?playerId=${player.id}`)}
+            
+          >
+            Ver vídeo
+          </PaperButton>
         </Card.Actions>
       </Card>
     </ScrollView>
