@@ -1,19 +1,8 @@
 // app/detalle.tsx
 import React, { useEffect, useState } from 'react';
-import {
-  Text,
-  View,
-  Image,
-  ScrollView,
-  Button,
-  ActivityIndicator
-} from 'react-native';
-import {
-  useLocalSearchParams,
-  useRouter,
-  Stack
-} from 'expo-router';
-import { styles } from '@/styles/detalleStyles';
+import { ScrollView, StyleSheet, View, Dimensions, ActivityIndicator } from 'react-native';
+import { Appbar, Card, Title, Paragraph, Button as PaperButton, Text } from 'react-native-paper';
+import { useLocalSearchParams, useRouter, Stack } from 'expo-router';
 import { doc, getDoc } from 'firebase/firestore';
 import { db } from '../firebase/firebaseConfig';
 
@@ -29,90 +18,119 @@ type Player = {
   rpg: number;
   apg: number;
   image: string;
-  videoFile: string;
+  videoFile?: string;
 };
 
 export default function Detalle() {
   const router = useRouter();
-  const { id } = useLocalSearchParams<{ id: string }>();
-  const [jugador, setJugador] = useState<Player | null>(null);
+  const { id: playerId } = useLocalSearchParams<{ id: string }>();
+  const [player, setPlayer] = useState<Player | null>(null);
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
-    if (!id) {
+    if (!playerId) {
       setLoading(false);
       return;
     }
-
-    const fetchJugador = async () => {
+    (async () => {
       try {
-        const docRef = doc(db, 'players', id);
-        const docSnap = await getDoc(docRef);
-        if (docSnap.exists()) {
-          const data = docSnap.data() as Omit<Player, 'id'>;
-          setJugador({ id: docSnap.id, ...data });
-        } else {
-          console.warn('Jugador no encontrado');
+        const snap = await getDoc(doc(db, 'players', playerId));
+        if (snap.exists()) {
+          setPlayer({ id: snap.id, ...(snap.data() as Omit<Player,'id'>) });
         }
-      } catch (error) {
-        console.error('Error obteniendo jugador:', error);
+      } catch (e) {
+        console.error(e);
       } finally {
         setLoading(false);
       }
-    };
+    })();
+  }, [playerId]);
 
-    fetchJugador();
-  }, [id]);
-
-  // Estado de carga
   if (loading) {
     return (
-      <View style={{ flex: 1, justifyContent: 'center', alignItems: 'center' }}>
+      <View style={styles.loading}>
         <ActivityIndicator size="large" />
-        <Text style={{ marginTop: 8 }}>Cargando jugador...</Text>
+        <Text>Cargando jugador…</Text>
       </View>
     );
   }
 
-  // Si no hay jugador
-  if (!jugador) {
+  if (!player) {
     return (
-      <View style={{ flex: 1, justifyContent: 'center', alignItems: 'center', padding: 16 }}>
-        <Text>Jugador no encontrado.</Text>
-      </View>
+      <>
+        <Appbar.Header>
+          <Appbar.BackAction onPress={() => router.back()} />
+          <Appbar.Content title="Jugador no encontrado" />
+        </Appbar.Header>
+        <View style={styles.center}>
+          <Text>Lo sentimos, no encontramos ese jugador.</Text>
+        </View>
+      </>
     );
   }
 
-  // Vista de detalle
   return (
     <>
-      <Stack.Screen options={{ title: jugador.name }} />
-      <ScrollView contentContainerStyle={styles.container}>
-        <Image
-          source={{ uri: jugador.image }}
-          style={styles.image}
-          resizeMode="cover"
-        />
-        <Text style={styles.data}>Número: {jugador.number}</Text>
-        <Text style={styles.data}>Edad: {jugador.age} años</Text>
-        <Text style={styles.data}>Altura: {jugador.height} m</Text>
-        <Text style={styles.data}>Peso: {jugador.weight} kg</Text>
-        <Text style={styles.data}>Posición: {jugador.position}</Text>
-        <Text style={styles.data}>PPG: {jugador.ppg}</Text>
-        <Text style={styles.data}>RPG: {jugador.rpg}</Text>
-        <Text style={styles.data}>APG: {jugador.apg}</Text>
+      <Stack.Screen options={{ headerShown: false }} />
+      <Appbar.Header elevated>
+        <Appbar.BackAction onPress={() => router.back()} />
+        <Appbar.Content title={player.name} />
+      </Appbar.Header>
 
-        <View style={{ marginTop: 24 }}>
-          <Button
-            title="Ver vídeo"
-            onPress={() =>
-              router.push(
-                `/media?playerId=${encodeURIComponent(jugador.id)}`
-              )
-            }
-          />
-        </View>
+      <ScrollView contentContainerStyle={styles.container}>
+        <Card style={styles.card}>
+          <Card.Cover source={{ uri: player.image }} />
+          <Card.Content>
+            <Title>{player.name}</Title>
+            <Paragraph>Número: {player.number}</Paragraph>
+            <Paragraph>Edad: {player.age} años</Paragraph>
+            <Paragraph>Altura: {player.height} m</Paragraph>
+            <Paragraph>Peso: {player.weight} kg</Paragraph>
+            <Paragraph>Posición: {player.position}</Paragraph>
+            <Paragraph>
+              Estadísticas: PPG {player.ppg} | RPG {player.rpg} | APG {player.apg}
+            </Paragraph>
+          </Card.Content>
+          <Card.Actions style={styles.actions}>
+            <PaperButton
+              mode="contained"
+              onPress={() =>
+                router.push(`/media?playerId=${encodeURIComponent(player.id)}`)
+              }
+            >
+              Ver vídeo
+            </PaperButton>
+          </Card.Actions>
+        </Card>
       </ScrollView>
     </>
   );
 }
+
+const styles = StyleSheet.create({
+  loading: {
+    flex:            1,
+    justifyContent:  'center',
+    alignItems:      'center',
+  },
+  center: {
+    flex:            1,
+    justifyContent:  'center',
+    alignItems:      'center',
+    padding:         16,
+  },
+  container: {
+    padding:         16,
+    alignItems:      'center',
+  },
+  card: {
+    width:           Dimensions.get('window').width - 32,
+    borderRadius:    12,
+    overflow:        'hidden',
+    elevation:       4,
+  },
+  actions: {
+    justifyContent: 'flex-end',
+    padding:        16,
+  },
+});
