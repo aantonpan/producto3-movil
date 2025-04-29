@@ -1,16 +1,25 @@
-import { StyleSheet } from "react-native";
+// styles/listadoStyles.ts
+import { StyleSheet, Dimensions } from "react-native";
+const { width: screenW } = Dimensions.get("window");
 
 export const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: "#FFFFFF",
+    backgroundColor: "#F5F5F5", 
+    paddingTop: 0, 
   },
   list: {
     padding: 16,
+    paddingBottom: 24,
+
   },
-  content: {
+  contentEmpty: {
     flex: 1,
-    alignItems: "center",
     justifyContent: "center",
+    alignItems: "center",
+  },
+  emptyText: {
+    color: "#666666",
+    fontSize: 16,
   },
 });
