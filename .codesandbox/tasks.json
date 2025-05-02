@@ -2,8 +2,8 @@
   // These tasks will run in order when initializing your CodeSandbox project.
   "setupTasks": [
     {
-      "command": "chmod +x .codesandbox/setup.sh && ./.codesandbox/setup.sh",
-      "name": "chmod +x .codesandbox/setup.sh && ./.codesandbox/setup.sh"
+      "name": "chmod +x .codesandbox/setup.sh && ./.codesandbox/setup.sh",
+      "command": "chmod +x .codesandbox/setup.sh && ./.codesandbox/setup.sh"
     }
   ],
 
@@ -16,33 +16,27 @@
     },
     "reset-project": {
       "name": "reset-project",
-      "command": "npm run reset-project",
-      "runAtStart": false
+      "command": "npm run reset-project"
     },
     "android": {
       "name": "android",
-      "command": "npm run android",
-      "runAtStart": false
+      "command": "npm run android"
     },
     "ios": {
       "name": "ios",
-      "command": "npm run ios",
-      "runAtStart": false
+      "command": "npm run ios"
     },
     "web": {
       "name": "web",
-      "command": "npm run web",
-      "runAtStart": false
+      "command": "npm run web"
     },
     "test": {
       "name": "test",
-      "command": "npm run test",
-      "runAtStart": false
+      "command": "npm run test"
     },
     "lint": {
       "name": "lint",
-      "command": "npm run lint",
-      "runAtStart": false
+      "command": "npm run lint"
     }
   }
 }
