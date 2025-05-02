@@ -3,5 +3,4 @@ echo "🔧 Instalando dependencias..."
 npm install --legacy-peer-deps
 
 echo "🚀 Arrancando Expo con tunnel..."
-yes | npx expo start --tunnel --clear
-
+npx expo start --tunnel --port 19006 --no-interactive
