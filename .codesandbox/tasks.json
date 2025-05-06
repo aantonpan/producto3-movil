@@ -10,7 +10,7 @@
       "name": "npm start",
       "command": "npm start",
       "preview": {
-        "port": 2222
+        "port": 19700
       }
     }
   }
