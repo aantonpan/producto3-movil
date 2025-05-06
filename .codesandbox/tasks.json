@@ -1,6 +1,6 @@
 {
   "tasks": {
-    "start": "npm start"
+    "start": "npm install && npm start"
   },
   "preview": {
     "port": 19006
