@@ -1,9 +1,8 @@
 {
   "tasks": {
-    "start": "bash .codesandbox/setup.sh"
+    "start": "npm start"
   },
   "preview": {
     "port": 19006
   }
-
 }
