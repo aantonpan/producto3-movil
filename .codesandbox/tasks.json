@@ -2,5 +2,8 @@
   "tasks": {
     "start": "bash .codesandbox/setup.sh"
   },
-  "autoRestart": true
+  "preview": {
+    "port": 19002
+  }
+
 }
