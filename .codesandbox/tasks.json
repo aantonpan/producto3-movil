@@ -3,6 +3,6 @@
     "start": "npm install && npm start"
   },
   "preview": {
-    "port": 19500
+    "port": 19700
   }
 }
