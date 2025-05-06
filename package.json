@@ -4,7 +4,7 @@
   "main": "expo-router/entry",
   "private": true,
   "scripts": {
-    "start": "npx expo start --tunnel --no-interactive",
+    "start": "npx expo start --tunnel --port 19700",
     "android": "expo start --android",
     "ios": "expo start --ios",
     "web": "expo start --web",
