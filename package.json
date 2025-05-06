@@ -4,7 +4,7 @@
   "main": "expo-router/entry",
   "private": true,
   "scripts": {
-    "start": "expo start --tunnel --legacy --port 19700",
+    "start": "npm install --legacy-peer-deps && npx expo start --tunnel --port 19700",
     "android": "expo start --android",
     "ios": "expo start --ios",
     "web": "expo start --web",
