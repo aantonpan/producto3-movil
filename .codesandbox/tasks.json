@@ -1,8 +1,17 @@
 {
+  "setupTasks": [
+    {
+      "name": "Installing Dependencies",
+      "command": "npm install"
+    }
+  ],
   "tasks": {
-    "start": "npm start"
-  },
-  "preview": {
-    "port": 19700
+    "start": {
+      "name": "npm start",
+      "command": "npm start",
+      "preview": {
+        "port": 19700
+      }
+    }
   }
 }
